@@ -1,3 +1,6 @@
+#ifndef LAMIA_SOCKET_H
+#define LAMIA_SOCKET_H
+
 #ifndef Linux
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <WinSock2.h>
@@ -33,11 +36,24 @@ typedef enum
 	laMiaSocketTypeClient
 }laMiaSocketType, laMiaSocketType_t;
 
-typedef unsigned int laMiaSocketSize;
+typedef size_t laMiaSocketSize;
 
 class laMiaSocket
 {
 public:
+	laMiaSocket(void)
+	{
+		m_BufSize = 256;
+		m_pSendMessage = new char[m_BufSize];
+		m_pRecvMessage = new char[m_BufSize];
+	#ifndef Linux
+		if (WSAStartup(MAKEWORD(2, 2), &m_WSD) != 0)
+		{
+			logStr("WSAStartup failed!~");
+			exit(1);
+		}
+	#endif
+	}
 	laMiaSocket(const laMiaSocketType &type, const int &port)
 	{
 		m_BufSize = 256;
@@ -92,6 +108,10 @@ public:
 	void setBufSize(const laMiaSocketSize &size)
 	{
 		m_BufSize = size;
+		delete[] m_pSendMessage;
+		delete[] m_pRecvMessage;
+		m_pSendMessage = new char[m_BufSize];
+		m_pRecvMessage = new char[m_BufSize];
 	}
 
 	int bindSocket()
@@ -109,7 +129,7 @@ public:
 
 	void listenClient(void)
 	{
-		bindSocket();
+		// bindSocket();
 		int retVal = listen(m_Server, 1);
 		if (retVal == SOCKET_ERROR)
 		{
@@ -155,10 +175,9 @@ public:
 			logStr("SEND DATA TO CLIENT:");
 		else if(m_laMiaSocketType == laMiaSocketTypeClient)
 			logStr("SEND DATA TO SERVER:");
-		memset(m_pSendMessage, m_BufSize, 0);
 		memset(m_pSendMessage, 0, m_BufSize);
 		if(buf != NULL)
-			memcpy(m_pSendMessage, buf, strlen(buf));
+			memcpy(m_pSendMessage, buf, m_BufSize);
 		else
 			std::cin >> m_pSendMessage;
 		int retVal;
@@ -194,12 +213,15 @@ public:
 			if (m_pRecvMessage[0] == '\0')
 			{
 				logStr("Waiting For Client");
-				return;
+				listenClient();
 			}
-			if (buf != NULL)
-				memcpy(buf, m_pRecvMessage, m_BufSize);
-			logStr("RECV DATA FROM CLIENT:");
-			fprintf(stderr, "------------ %s -----------\n", m_pRecvMessage);
+			else
+			{
+				if (buf != NULL)
+					memcpy(buf, m_pRecvMessage, m_BufSize);
+				logStr("RECV DATA FROM CLIENT:");
+				fprintf(stderr, "------------ %s -----------\n", m_pRecvMessage);
+			}
 		}
 		else if(m_laMiaSocketType == laMiaSocketTypeClient)
 		{
@@ -210,7 +232,7 @@ public:
 		}
 	}
 
-private:
+// private:
 #ifdef Linux
 	void closesocket(SOCKET skt)
 	{
@@ -233,3 +255,5 @@ private:
 	int m_Port;
 	laMiaSocketType m_laMiaSocketType;
 };
+
+#endif
