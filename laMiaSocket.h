@@ -88,21 +88,13 @@ public:
 			logStr("socket failed!~");
 			WSACleanup();
 		}
-		m_AddrServ.sin_family = AF_INET;
-		m_AddrServ.sin_port = htons(m_Port);
-		if (type == laMiaSocketTypeServer)
-		{
-			m_AddrServ.sin_addr.s_addr = INADDR_ANY;
-		}
-		else if(type == laMiaSocketTypeClient)
-		{
-			m_AddrServ.sin_addr.s_addr = inet_addr("192.168.11.53");
-		}
 	}
 
 	void setPort(const int &port)
 	{
 		m_Port = port;
+		m_AddrServ.sin_family = AF_INET;
+		m_AddrServ.sin_port = htons(m_Port);
 	}
 
 	void setBufSize(const laMiaSocketSize &size)
@@ -114,8 +106,15 @@ public:
 		m_pRecvMessage = new char[m_BufSize];
 	}
 
-	int bindSocket()
+	int bindClient(char *client_ip = NULL)
 	{
+		if (m_laMiaSocketType == laMiaSocketTypeServer)
+		{
+			if(client_ip)
+				m_AddrServ.sin_addr.s_addr = inet_addr(client_ip);
+			else
+				m_AddrServ.sin_addr.s_addr = INADDR_ANY;
+		}
 		int retVal = bind(m_Server, (sockaddr*)&m_AddrServ, sizeof(sockaddr_in));
 		if (retVal == SOCKET_ERROR)
 		{
@@ -153,8 +152,15 @@ public:
 		}
 	}
 
-	void connectServer(void)
+	void connectServer(char *server_ip = NULL)
 	{
+		if(m_laMiaSocketType == laMiaSocketTypeClient)
+		{
+			if(server_ip)
+				m_AddrServ.sin_addr.s_addr = inet_addr(server_ip);
+			else
+				m_AddrServ.sin_addr.s_addr = inet_addr("127.0.0.1");
+		}
 		int retVal = connect(m_Server, (struct sockaddr *)&m_AddrServ, sizeof(struct sockaddr_in));
 		if (0 != retVal)
 		{
