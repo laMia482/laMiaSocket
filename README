@@ -1,0 +1,29 @@
+//*******************************************
+//  filename:          README
+//  create time:       Y2017M7D22
+//  aim to do:         get started with socket
+//********************************************
+
+
+A class named 'laMiaSocket' is provided with functions of:
+1. new a object with its type(server or client), port
+2. send message to which ip(using sendMessage(ip), default is to local machine of "127.0.0.1")
+3. recieve message from which ip(using recvMessage(ip), default is from local machine)
+4. this class is fine to use both under windows or linux
+5. details of usage can be found in client.cpp
+6. to be continue...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
