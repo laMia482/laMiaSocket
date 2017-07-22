@@ -4,6 +4,7 @@
 #ifndef Linux
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <WinSock2.h>
+typedef int socklen_t;
 #else
 #define SOCKET_ERROR -1
 #define INVALID_SOCKET -1
@@ -21,6 +22,7 @@ typedef int SOCKET;
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <iostream>
 
 #pragma comment(lib, "ws2_32.lib")  
@@ -185,7 +187,7 @@ public:
 		if(buf != NULL)
 			memcpy(m_pSendMessage, buf, m_BufSize);
 		else
-			std::cin >> m_pSendMessage;
+			std::cin.getline(m_pSendMessage, m_BufSize, '\n');
 		int retVal;
 		if(m_laMiaSocketType == laMiaSocketTypeServer)
 			retVal = send(m_Client, m_pSendMessage, m_BufSize, 0);
