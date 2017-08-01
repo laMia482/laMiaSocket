@@ -108,7 +108,7 @@ public:
 		m_pRecvMessage = new char[m_BufSize];
 	}
 
-	int bindClient(char *client_ip = NULL)
+	int bindClient(const char *client_ip = NULL)
 	{
 		if (m_laMiaSocketType == laMiaSocketTypeServer)
 		{
@@ -154,7 +154,7 @@ public:
 		}
 	}
 
-	void connectServer(char *server_ip = NULL)
+	void connectServer(const char *server_ip = NULL)
 	{
 		if(m_laMiaSocketType == laMiaSocketTypeClient)
 		{
@@ -168,7 +168,7 @@ public:
 		{
 			logStr("connect failed!~");
 			closesocket(m_Server);
-			// WSACleanup(); 
+			 WSACleanup(); 
 			return;
 		}
 		else
@@ -177,7 +177,7 @@ public:
 		}
 	}
 
-	void sendMessage(char *buf = NULL)
+	void sendMessage(const char *buf = NULL)
 	{
 		if(m_laMiaSocketType == laMiaSocketTypeServer)
 			logStr("SEND DATA TO CLIENT:");

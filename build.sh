@@ -1,1 +1,1 @@
-g++ client.cpp laMiaSocket.h -o client -DLinux `pkg-config --libs opencv` `pkg-config --cflags opencv` 
+g++ socket.cpp laMiaSocket.h -o socket -DLinux `pkg-config --libs opencv` `pkg-config --cflags opencv` 
