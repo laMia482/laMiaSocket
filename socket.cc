@@ -2,24 +2,24 @@
 
 int main(int argc, char **argv)
 {
-	char type = 'a';
-	while (!(type - 'c' == 0 || type - 's' == 0))
+	std::string type;
+	while (!(type == "c" || type == "s"))
 	{
 		logStr("Select to be client or server [c/s]?");
-		std::cin.getline(&type, strlen(&type), '\n');
+		std::cin >> type;
 	}
 	laMiaSocket *ls = new laMiaSocket;
 	ls->setPort(4999);
-	if (type == 'c')
+	if (type == "c")
 	{
 
 		ls->setRole(laMiaSocketTypeClient);
-		char ip_addr[32];
+		std::string ip_addr;
 		logStr("Client selected, choose server ip:");
-		std::cin.getline(ip_addr, 32, '\n');
-		ls->connectServer(ip_addr);
+		std::cin >> ip_addr;
+		ls->connectServer(ip_addr.c_str());
 	}
-	else if (type == 's')
+	else if (type == "c")
 	{
 		ls->setRole(laMiaSocketTypeServer);
 		logStr("Server selected");
@@ -29,9 +29,9 @@ int main(int argc, char **argv)
 
 	while (true)
 	{
-		if (type == 'c')
+		if (type == "c")
 			ls->sendMessage();
-		else if (type == 's')
+		else if (type == "s")
 			ls->recvMessage();
 	}
 
