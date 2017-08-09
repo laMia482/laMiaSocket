@@ -21,7 +21,6 @@ typedef int SOCKET;
 #include <stdlib.h>
 #include <fcntl.h>
 #include <sys/shm.h>
-#include <glog/logging.h>
 #endif
 
 #include <stdio.h>
