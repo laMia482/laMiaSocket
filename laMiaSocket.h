@@ -1,6 +1,8 @@
 #ifndef LAMIA_SOCKET_H
 #define LAMIA_SOCKET_H
 
+#define SOCKET_DROP 0
+
 #ifndef Linux
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <WinSock2.h>
@@ -8,7 +10,6 @@ typedef int socklen_t;
 #else
 #define SOCKET_ERROR -1
 #define INVALID_SOCKET -1
-#define SOCKET_DROP 0
 typedef int SOCKET;
 // tydedef sockaddr_in SOCKADDR_IN;
 #include <sys/types.h>
