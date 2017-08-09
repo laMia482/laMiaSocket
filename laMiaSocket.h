@@ -8,6 +8,7 @@ typedef int socklen_t;
 #else
 #define SOCKET_ERROR -1
 #define INVALID_SOCKET -1
+#define SOCKET_DROP 0
 typedef int SOCKET;
 // tydedef sockaddr_in SOCKADDR_IN;
 #include <sys/types.h>
@@ -19,6 +20,7 @@ typedef int SOCKET;
 #include <stdlib.h>
 #include <fcntl.h>
 #include <sys/shm.h>
+#include <glog/logging.h>
 #endif
 
 #include <stdio.h>
@@ -217,11 +219,15 @@ public:
 				WSACleanup();
 				exit(-2);
 			}
-
 			if (m_pRecvMessage[0] == '\0')
 			{
-				logStr("Waiting For Client");
-				listenClient();
+				if(retVal == SOCKET_DROP)
+				{
+					logStr("Waiting For Client");
+					listenClient();
+				}
+				else
+					return;
 			}
 			else
 			{
