@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 		std::cin >> ip_addr;
 		ls->connectServer(ip_addr.c_str());
 	}
-	else if (type == "c")
+	else if (type == "s")
 	{
 		ls->setRole(laMiaSocketTypeServer);
 		logStr("Server selected");
