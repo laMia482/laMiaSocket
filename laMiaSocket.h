@@ -6,6 +6,7 @@
 #ifndef Linux
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <WinSock2.h>
+#include <string>
 typedef int socklen_t;
 #else
 #define SOCKET_ERROR -1

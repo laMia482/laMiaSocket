@@ -1,5 +1,15 @@
 #include "laMiaSocket.h"
 
+typedef struct
+{
+  unsigned int category;
+  unsigned int lefttopx;
+  unsigned int lefttopy;
+  unsigned int width;
+  unsigned int height;
+  float confidence;
+}TensorflowLoaderPrediction;
+
 int main(int argc, char **argv)
 {
 	std::string type;
@@ -32,7 +42,9 @@ int main(int argc, char **argv)
 		if (type == "c")
 			ls->sendMessage();
 		else if (type == "s")
+        {
 			ls->recvMessage();
+        }
 	}
 
 }
